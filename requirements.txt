@@ -5,3 +5,5 @@ sqlalchemy
 psycopg2-binary
 httpie
 multidict
+pytest
+pytest-mock

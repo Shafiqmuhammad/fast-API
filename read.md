@@ -1,12 +1,3 @@
-# Run the FastAPI application using uvicorn main:app --reload and deploy.
-
-
-# Run the Streamlit client using streamlit run streamlit_client.py.
-
-
-# Run the Python console client using python python_console_client.py.
-
-
 
 # Firsly Create a Envirment and activate 
 - conda create --name munnahero python=3.12
@@ -27,7 +18,7 @@
 - pip install sqlalchemy 
 
 # The sqlalchemy setup: 
-- psycopg2-binary
+- pip psycopg2-binary
 
 # The HTTPie text web clien: 
 - pip install httpie
@@ -38,13 +29,30 @@
 # The Requests synchronous web client package
 - pip install requests
 
+# httpx
+- pip install httpx
 
+# Pytest
+- pip install pytest
 
+# Pytest-mock
+- pip install pytest-mock
 
 # The requirements: 
 - pip install -r requirements.txt
 
 above dependencies may isntall and also install in requirements 
+
+
+# Run the FastAPI application using uvicorn  .
+- uvicorn main:app --reload
+
+# Run the Streamlit client using 
+- streamlit run streamlit_client.py
+- https://shafiqmuhammad-fast-api-streamlit-client-upgnej.streamlit.app/
+
+# Run the Python console client using 
+- python python_console_client.py.
 
 
 ### 1. Set up the PostgreSQL Database and SQLAlchemy Models
@@ -150,21 +158,104 @@ def delete_todo(todo_id: int, db: Session = Depends(get_db)):
 ### 3. Implement Streamlit Client
 # streamlit_client.py
 
+# streamlit_client.py
+
+import streamlit as st
+import requests
+
+BASE_URL = "http://127.0.0.1:8000"
+
+st.title("Todo App")
+
+def create_todo():
+    title = st.text_input("Enter Todo Title")
+    description = st.text_area("Enter Todo Description")
+    if st.button("Add Todo"):
+        response = requests.post(f"{BASE_URL}/todos/", json={"title": title, "description": description})
+        if response.status_code == 200:
+            st.success("Todo added successfully")
+
+def delete_todo():
+    todo_id = st.number_input("Enter Todo ID to delete")
+    if st.button("Delete Todo"):
+        response = requests.delete(f"{BASE_URL}/todos/{todo_id}")
+        if response.status_code == 200:
+            st.success("Todo deleted successfully")
+
+if __name__ == "__main__":
+    create_todo()
+    delete_todo()
 
 
 ### 4. Python Console Client
 # python_console_client.py
 
+# python_console_client.py
+
+import requests
+
+BASE_URL = "http://127.0.0.1:8000"
+
+def create_todo():
+    title = input("Enter Todo Title: ")
+    description = input("Enter Todo Description: ")
+    response = requests.post(f"{BASE_URL}/todos/", json={"title": title, "description": description})
+    if response.status_code == 200:
+        print("Todo added successfully")
+
+def delete_todo():
+    todo_id = input("Enter Todo ID to delete: ")
+    response = requests.delete(f"{BASE_URL}/todos/{todo_id}")
+    if response.status_code == 200:
+        print("Todo deleted successfully")
+
+if __name__ == "__main__":
+    create_todo()
+    delete_todo()
 
 
 ### 5. TypeScript Node.js Console Client
 # nodejs_console_client.ts
 
+// nodejs_console_client.ts
+
+import axios from 'axios';
+
+const BASE_URL = "http://127.0.0.1:8000";
+
+async function createTodo() {
+    const title = 'Sample Title';
+    const description = 'Sample Description';
+    try {
+        const response = await axios.post(`${BASE_URL}/todos/`, { title, description });
+        console.log("Todo added successfully");
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+async function deleteTodo() {
+    const todoId = 1; // Replace with the desired Todo ID
+    try {
+        const response = await axios.delete(`${BASE_URL}/todos/${todoId}`);
+        console.log("Todo deleted successfully");
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+createTodo();
+deleteTodo();
 
 
 ### 6. Unit Tests using Pytest
 Create tests for the FastAPI endpoints and their functionality.
 # test_api.py
+
+# test_api.py
+
+
+
 
 
 
